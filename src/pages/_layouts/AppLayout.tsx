@@ -1,23 +1,29 @@
 
-import { Outlet,Navigate } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { useUserContext } from "../../context/AuthContext";
+import { Header } from "../../components/Header";
+
 
 
 export function AppLayout() {
-    const {isAuthenticated, isLoading} = useUserContext()
+    const { isAuthenticated, isLoading } = useUserContext()
 
-    if(isLoading) {
+    if (isLoading) {
         return
     }
 
     return (
         <>
             {isAuthenticated ? (
-                <Outlet />
+                <>
+                    <Header />
+                    <Outlet/>
+                </>
+
             ) : (
                 <Navigate to="/login" />
             )}
-         
+
         </>
     )
 }

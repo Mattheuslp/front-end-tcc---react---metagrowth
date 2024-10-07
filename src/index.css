@@ -61,7 +61,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground bg-black ;
   }
 }
 
@@ -73,5 +73,9 @@
 
     .c-descriptionLogin {
       @apply flex flex-col gap-5 h-[40rem] items-center justify-start p-5 font-montserrat 
+    }
+
+    .c-title {
+      @apply text-transparent text-str
     }
 }

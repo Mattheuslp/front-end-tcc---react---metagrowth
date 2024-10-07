@@ -4,9 +4,11 @@ import { api } from "../lib/axios";
 
 
 export const INITIAL_USER = {
-    id: '',
     name: '',
     email: '',
+    position: '',
+    role: '',
+    imgUrl: ''
 }
 
 const INITIAL_STATE = {
