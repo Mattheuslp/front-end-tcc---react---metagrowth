@@ -54,7 +54,7 @@ export function Header() {
             <div className="flex absolute bottom-0 gap-16 font-bold">
                 <NavLink to={'/'}>Inicio</NavLink>
                 <NavLink to={'/metas'}>Metas</NavLink>
-                <NavLink to={'/feedback'}>Feedback</NavLink>
+                <NavLink to={'/feedbacks'}>Feedback</NavLink>
             </div>
         </div>
     )

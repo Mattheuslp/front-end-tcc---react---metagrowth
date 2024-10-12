@@ -82,6 +82,7 @@ export function Goals() {
                         </div>
                     </TableCell>
                 </TableBody>
+                
             </Table>
         </div>
     )
