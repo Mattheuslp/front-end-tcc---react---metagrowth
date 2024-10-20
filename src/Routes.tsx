@@ -5,6 +5,7 @@ import { Signin } from './pages/auth/Sign-in'
 import { Home } from './pages/app/home/Home'
 import { Goals } from './pages/app/goals/Goals'
 import { Feedbacks } from './pages/app/Feedbacks/Feedbacks'
+import { Management } from './pages/app/management/Management'
 
 
 
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/metas', element: <Goals/>},
       { path: '/feedbacks', element: <Feedbacks/>},
+      { path: '/gestao', element: <Management/>},
     ],
   },
 

@@ -55,6 +55,7 @@ export function Header() {
                 <NavLink to={'/'}>Inicio</NavLink>
                 <NavLink to={'/metas'}>Metas</NavLink>
                 <NavLink to={'/feedbacks'}>Feedback</NavLink>
+                <NavLink to={'/gestao'}>Gestão</NavLink>
             </div>
         </div>
     )

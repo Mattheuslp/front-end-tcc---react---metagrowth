@@ -1,4 +1,8 @@
 import logoFeedback from '../../../assets/logoFeedback.png'
+import { ButtonIcon } from '../../../components/ButtonIcon'
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { Dialog, DialogTrigger } from '../../../components/ui/dialog';
+import { FeedbackCreate } from './FeedbackCreate';
 
 export function Feedbacks() {
     return (
@@ -16,8 +20,18 @@ export function Feedbacks() {
                 </div>
             </section>
             <div className="bg-primary-yellowNeon h-auto  w-1"></div>
-            <section>
+            <section className='w-full mt-8'>
+                <div className='flex justify-between'>
+                    <h1 className='text-primary-yellowNeon font-bold text-3xl'>Feedbacks</h1>
+                    <Dialog>
+                        <DialogTrigger >
+                            <ButtonIcon icon={IoChatboxEllipsesOutline } text="Novo feedback" />
+                        </DialogTrigger>
+                        <FeedbackCreate/>
+                    </Dialog>
 
+                </div>
+                <div className="bg-primary-yellowNeon w-full h-1 mt-5"></div>
             </section>
         </main>
     )

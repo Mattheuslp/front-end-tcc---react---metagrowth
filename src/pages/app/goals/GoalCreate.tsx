@@ -5,18 +5,22 @@ import { Label } from '../../../components/ui/label'
 import { Input } from '../../../components/ui/input'
 import { Switch } from '../../../components/ui/switch'
 import { Textarea } from "../../../components/ui/textarea"
+import { IoIosSave } from "react-icons/io";
+import { ButtonIcon } from '../../../components/ButtonIcon'
+
 
 export function GoalCreate() {
     return (
         <main>
-            <DialogContent className='bg-black'>
+            <DialogContent className='bg-black '>
                 <DialogHeader className='flex flex-col gap-2'>
                     <DialogTitle className='text-primary-yellowNeon'>Nova Meta</DialogTitle>
                     <div className="bg-primary-darkGray w-full h-[1px]"></div>
                 </DialogHeader>
-
-
-                <form action="" className='flex flex-col justify-center gap-3 mt-10 p-5 bg-primary-darkGray rounded-2xl'>
+                <div className='flex justify-end'>
+                    <ButtonIcon icon={IoIosSave} text="Salvar" />
+                </div>
+                <form action="" className='flex flex-col justify-center gap-3 mt-1 p-5 bg-primary-darkGray rounded-2xl'>
                     <div className='flex gap-5 '>
                         <Avatar className='h-20 w-20' >
                             <AvatarImage src={''} />
@@ -52,9 +56,9 @@ export function GoalCreate() {
                     </div>
 
                     <div className='flex gap-5 '>
-                        <div className='flex flex-col gap-2 flex-1'>
+                        <div className='flex flex-col gap-2 flex-1 '>
                             <Label htmlFor="titleGoal">Titulo da meta</Label>
-                            <Textarea id="titleGoal" className='rounded-2xl bg-white' />
+                            <Textarea id="titleGoal" className='h-24 rounded-2xl bg-white' />
                         </div>
                         <div className='flex flex-col gap-2'>
                             <Label htmlFor="startDate">Data de fim</Label>

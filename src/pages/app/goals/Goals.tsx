@@ -14,6 +14,7 @@ import {
     DialogTrigger,
 } from "./../../../components/ui/dialog"
 import { GoalCreate } from "./GoalCreate";
+import { ButtonIcon } from "../../../components/ButtonIcon";
 
 export function Goals() {
 
@@ -27,7 +28,7 @@ export function Goals() {
                     <div>
                         <Dialog>
                             <DialogTrigger >
-                                <button className="flex items-center  justify-center gap-1 c-yellowNeonBtn px-10 p-2 rounded-full" ><GoGoal />Nova meta</button>
+                                <ButtonIcon icon={GoGoal} text="Nova meta" />
                             </DialogTrigger>
                             <GoalCreate />
                         </Dialog>
@@ -82,7 +83,7 @@ export function Goals() {
                         </div>
                     </TableCell>
                 </TableBody>
-                
+
             </Table>
         </div>
     )
