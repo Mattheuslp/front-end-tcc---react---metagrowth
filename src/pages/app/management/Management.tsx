@@ -2,13 +2,14 @@ import { FaUsersGear } from "react-icons/fa6";
 import { Dialog, DialogTrigger } from "../../../components/ui/dialog";
 import { ButtonIcon } from "../../../components/ButtonIcon";
 import { FaCircleUser } from "react-icons/fa6";
+import { UserCreate } from "./UserCreate";
 
 export function Management() {
     return (
         <main className='flex gap-5 px-20 pt-10' style={{ height: 'calc(100vh - 6rem)' }}>
         <section className='flex flex-col items-center w-1/7'>
-            <div className='flex items-center justify-end h-16 w-16'>
-                 <FaUsersGear className="text-primary-yellowNeon "/>
+            <div className='flex gap-3 items-center justify-start h-16  w-full'>
+                 <FaUsersGear className="text-primary-yellowNeon " size={40}/>
                 <h1 className='text-primary-yellowNeon font-bold'>Equipes</h1>
             </div>
             <div className="bg-primary-yellowNeon w-full h-1"></div>
@@ -26,7 +27,7 @@ export function Management() {
                     <DialogTrigger >
                         <ButtonIcon icon={FaCircleUser } text="Novo colaborador" />
                     </DialogTrigger>
-                    
+                    <UserCreate />
                 </Dialog>
 
             </div>

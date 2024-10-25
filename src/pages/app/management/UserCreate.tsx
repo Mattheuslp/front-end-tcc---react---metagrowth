@@ -2,20 +2,16 @@ import { ButtonIcon } from "../../../components/ButtonIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 import { DialogContent, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
 import { IoIosSave } from "react-icons/io";
+import avatar from '../../../assets/avatar.png'
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
-import avatar from '../../../assets/avatar.png'
 import { Textarea } from "../../../components/ui/textarea";
-import { StarRate } from "../../../components/StarRate";
 
-
-export function FeedbackCreate() {
-
-
+export function UserCreate() {
     return (
         <DialogContent className="bg-black ">
             <DialogHeader className='flex flex-col gap-2'>
-                <DialogTitle className='text-primary-yellowNeon'>Novo Feedback</DialogTitle>
+                <DialogTitle className='text-primary-yellowNeon'>Novo Colaborador</DialogTitle>
                 <div className="bg-primary-darkGray w-full h-[1px]"></div>
             </DialogHeader>
             <div className='flex justify-end'>
@@ -28,7 +24,7 @@ export function FeedbackCreate() {
                         <AvatarFallback asChild><img src={avatar} alt="avatar" className='bg-primary-darkGray' /></AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col gap-2 flex-1'>
-                        <Label htmlFor="name">Colaborador</Label>
+                        <Label htmlFor="name">Nome</Label>
                         <Input id="name" type="text" className='rounded-full bg-white' />
                     </div>
                     <div className='flex flex-col gap-2'>
@@ -40,30 +36,41 @@ export function FeedbackCreate() {
                         <Input id="role" type="text" className='rounded-full bg-white' />
                     </div>
                     <div className='flex flex-col gap-2'>
-                        <Label htmlFor="registration">Matricula</Label>
+                        <Label htmlFor="registration">Admissão</Label>
                         <Input id="registration" type="text" className='rounded-full bg-white' />
                     </div>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4 bg-w">
+                    <div className='flex flex-col gap-2 flex-1'>
+                        <Label htmlFor="email">E-mail</Label>
+                        <Input id="email" type="text" className='rounded-full bg-white' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label htmlFor="password">senha</Label>
+                        <Input id="password" type="password" className='rounded-full bg-white' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label htmlFor="phone">Telefone</Label>
+                        <Input id="phone" type="text" className='rounded-full bg-white' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label htmlFor="registration">Matricula</Label>
+                        <Input id="registration" type="text" className='rounded-full bg-white' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label htmlFor="education">Escolaridade</Label>
+                        <Input id="education" type="text" className='rounded-full bg-white' />
+                    </div>
+                </div>
+                <div className="grid gap-5 grid-cols-[2fr_1fr]">
                     <div className="flex-1">
-                        <Label htmlFor="feedbackDescription">Descreva o feedback</Label>
-                        <Textarea id="feedbackDescription" className='h-60 rounded-2xl bg-white' />
+                        <Label htmlFor="biography">Biografia</Label>
+                        <Textarea id="biography" className='h-60 rounded-2xl bg-white' />
                     </div>
-                    <div className="flex flex-col gap-3 font-semibold">
-                        <div >
-                            <h1>Competência técnica</h1>
-                            <StarRate />
-                        </div>
-                        <div >
-                            <h1>Resiliência</h1>
-                            <StarRate />
-                        </div>
-                        <div >
-                            <h1>Sociabilidade</h1>
-                            <StarRate />
-                        </div>
+                    <div className="flex-1">
+                        <Label htmlFor="certification">Certificações</Label>
+                        <Textarea id="certification" className='h-60 rounded-2xl bg-white' />
                     </div>
-
                 </div>
             </form>
         </DialogContent>
