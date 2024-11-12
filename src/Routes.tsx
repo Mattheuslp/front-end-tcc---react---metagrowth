@@ -6,6 +6,8 @@ import { Home } from './pages/app/home/Home'
 import { Goals } from './pages/app/goals/Goals'
 import { Feedbacks } from './pages/app/Feedbacks/Feedbacks'
 import { Management } from './pages/app/management/Management'
+import { UserEdit } from './pages/app/management/UserEdit'
+import { TeamEdit } from './pages/app/management/TeamEdit'
 
 
 
@@ -18,14 +20,16 @@ export const router = createBrowserRouter([
       { path: '/metas', element: <Goals/>},
       { path: '/feedbacks', element: <Feedbacks/>},
       { path: '/gestao', element: <Management/>},
+      { path: '/edicao/usuario/:userId', element: <UserEdit /> },
+      { path: '/edicao/equipe/:teamId', element: <TeamEdit /> },
     ],
   },
 
   {
-    path: '/',
+    path: '/auth',
     element: <AuthLayout />,
     children: [
-      { path: '/login', element: <Signin /> },
+      { path: '/auth/login', element: <Signin /> },
     ],
   },
 

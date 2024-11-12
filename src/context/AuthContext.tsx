@@ -1,57 +1,57 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "../lib/axios";
-
 
 export const INITIAL_USER = {
     name: '',
     email: '',
     position: '',
     role: '',
-    imgUrl: ''
-}
+    imageUrl: ''
+};
 
 const INITIAL_STATE = {
     user: INITIAL_USER,
-    isLoading: false,
+    isLoading: true, 
     isAuthenticated: false,
     loadUser: async () => false as boolean,
-}
+};
 
+const AuthContext = createContext(INITIAL_STATE);
 
-const AuthContext = createContext(INITIAL_STATE)
-
-export function AuthProvider({children}: {children: React.ReactNode}) {
-    const [user, setUser] = useState(INITIAL_USER)
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+    const [user, setUser] = useState(INITIAL_USER);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true); 
   
     useEffect(() => {
-        const token = localStorage.getItem('token')
-        if(token) {
-            loadUser()
+        const token = localStorage.getItem('token');
+        if (token) {
+            loadUser();
         } else {
-           setIsLoading(false);
+            setIsLoading(false);
         }
-    }, [])
+    }, []);
 
     async function loadUser() {
         try {
             setIsLoading(true);
 
-            const token = localStorage.getItem('token')
-            if(!token) return false
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setIsAuthenticated(false);
+                return false;
+            }
 
-            const {data} = await api.get('/getUser')
+            const { data } = await api.get('/getUser');
     
             setUser(data.user);
             setIsAuthenticated(true);
-            return true
+            return true;
          
         } catch (error) {
-            setUser(INITIAL_USER)
+            setUser(INITIAL_USER);
             setIsAuthenticated(false);
-            return false
+            return false;
         } finally {
             setIsLoading(false);
         }
@@ -61,15 +61,14 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
         user,
         loadUser,
         isLoading,
-        isAuthenticated
-    }
+        isAuthenticated,
+    };
 
     return (
         <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
-    )
+    );
 }
 
-export const useUserContext = () => useContext(AuthContext)
-
+export const useUserContext = () => useContext(AuthContext);

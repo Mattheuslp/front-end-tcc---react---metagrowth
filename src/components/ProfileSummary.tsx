@@ -4,17 +4,18 @@ import avatar from './../assets/avatar.png'
 interface ProfileSummaryProps {
     name: string
     position: string
-    imgUrl: string
+    imageUrl: string
 }
 
-export function ProfileSummary({ name = 'usuário', position = 'função', imgUrl }: ProfileSummaryProps) {
+export function ProfileSummary({ name = 'usuário', position = 'função', imageUrl }: ProfileSummaryProps) {
+   
     return (
         <div className="flex gap-5">
             <Avatar>
-                <AvatarImage src={imgUrl ?? ''} />
+                <AvatarImage src={imageUrl ?? ''} />
                 <AvatarFallback asChild><img src={avatar} alt="avatar" className='bg-primary-darkGray'/></AvatarFallback>
             </Avatar>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-start justify-start">
                 <h1>{name}</h1>
                 <p>{position}</p>
             </div>

@@ -21,7 +21,7 @@ export function AppLayout() {
                 </>
 
             ) : (
-                <Navigate to="/login" />
+                <Navigate to="/auth/login" />
             )}
 
         </>

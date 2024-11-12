@@ -50,7 +50,7 @@ api.interceptors.response.use(
           localStorage.removeItem('token');
           await api.delete('/logout');
         } finally {
-          window.location.replace('/login');
+          window.location.replace('/auth/login');
         }
 
         return Promise.reject(err);

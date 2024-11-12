@@ -1,10 +1,18 @@
-import { ElementType } from "react"
+import { ElementType, ButtonHTMLAttributes } from "react";
 
-interface ButtonIconProps {
-    icon: ElementType,
-    text: string
+interface ButtonIconProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    icon: ElementType;
+    text: string;
 }
 
-export function ButtonIcon({icon: Icon, text}: ButtonIconProps) {
-    return <button className="flex items-center  justify-center gap-1 c-yellowNeonBtn px-10 p-2 rounded-full" ><Icon />{text}</button>
+export function ButtonIcon({ icon: Icon, text, ...props }: ButtonIconProps) {
+    return (
+        <button
+            className="flex items-center justify-center gap-1 c-yellowNeonBtn px-10 p-2 rounded-full text-nowrap"
+            {...props}
+        >
+            <Icon />
+            {text}
+        </button>
+    );
 }
