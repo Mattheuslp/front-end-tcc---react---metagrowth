@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table";
 import { IoIosSave } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
-import { useFetchUsersNotManagingTeams, useFetchUserWithouTeams, useFetchTeamById } from "../../../lib/react-query/querysAndMuations";
+import { useFetchUsersNotManagingTeams, useFetchUserWithouTeams, useFetchTeamById, useUpdateTeam } from "../../../lib/react-query/querysAndMuations";
 import toast from "react-hot-toast";
 
 const createTeamSchema = z.object({
@@ -33,17 +33,14 @@ export function TeamEdit() {
     const { data: teamData } = useFetchTeamById(teamId);
     const { data: userWithoutTeams } = useFetchUserWithouTeams() as { data: UserWithoutTeam[] };
     const { data: userNotManagingTeams } = useFetchUsersNotManagingTeams() as { data: UserWithoutTeam[] };
-
+    const { mutateAsync: updateTeam } = useUpdateTeam();
     const [selectedMembers, setSelectedMembers] = useState<UserWithoutTeam[]>([]);
     const [selectedUser, setSelectedUser] = useState<string>("");
-
- 
-    const [selectedManager, setSelectedManager] = useState<string>("");
 
     useEffect(() => {
         if (teamData) {
             setValue("name", teamData.name);
-            setSelectedManager(teamData.manager?.id || "");
+            setValue("manager", teamData.manager?.id || ""); // Define o valor inicial de "manager"
             setSelectedMembers(teamData.Users || []);
         }
     }, [teamData, setValue]);
@@ -67,12 +64,15 @@ export function TeamEdit() {
                 managerId: manager,
                 userIds: selectedMembers.map(member => member.id),
             };
+
+            if (teamId) {
+                await updateTeam({ teamId, teamData });
+            }
+
             toast.success("Equipe atualizada com sucesso");
         } catch (error: any) {
             toast.error(error.message);
-        } finally {
-            reset();
-        }
+        } 
     };
 
     const managerOptions = userNotManagingTeams && userNotManagingTeams.length > 0
@@ -104,9 +104,8 @@ export function TeamEdit() {
                         <Label htmlFor="manager">Gestor da Equipe</Label>
                         <select
                             id="manager"
-                            {...register("manager")}
-                            value={selectedManager}
-                            onChange={(e) => setSelectedManager(e.target.value)}
+                            {...register("manager")} // Gerenciado pelo react-hook-form
+                            onChange={(e) => setValue("manager", e.target.value)} // Define o valor manualmente
                             className="rounded-full bg-white p-2"
                         >
                             <option value="">Selecione um gestor</option>

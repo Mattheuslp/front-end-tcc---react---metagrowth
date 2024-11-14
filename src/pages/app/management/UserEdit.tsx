@@ -36,7 +36,7 @@ export function UserEdit() {
     const { data: teams } = useFetchTeams();
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
-
+    console.log('ussss', user)
     const {
         register,
         handleSubmit,

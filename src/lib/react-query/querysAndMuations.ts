@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createTeam, createUser, deleteUser, fetchTeamById, fetchTeams, fetchUser, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getUserById, logout, signIn, Team, updateUser} from "../../api";
+import { createTeam, createUser, deleteUser, fetchTeamById, fetchTeams, fetchUser, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getUserById, logout, signIn, Team, updateTeam, UpdateTeamData, updateUser} from "../../api";
 import { queryClient } from "./reactQuery";
 
 
@@ -113,4 +113,15 @@ export const useFetchTeamById = (teamId?: string) => {
         },
         enabled: !!teamId
     });
+}
+
+export const useUpdateTeam = () => {
+    return useMutation({
+        mutationFn: ({teamId, teamData}: {teamId: string, teamData: UpdateTeamData}) => updateTeam(teamId, teamData),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['fetchTeams']
+              })
+        }
+    })
 }

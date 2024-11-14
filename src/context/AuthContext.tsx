@@ -22,7 +22,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState(INITIAL_USER);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true); 
-  
+
+    console.log(user)
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -42,9 +44,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 return false;
             }
 
-            const { data } = await api.get('/getUser');
+            const { data } = await api.get('/fetchusers', {
+                params: {
+                    currentUser: true
+                }
+            });
     
-            setUser(data.user);
+          
+            setUser(data);
             setIsAuthenticated(true);
             return true;
          

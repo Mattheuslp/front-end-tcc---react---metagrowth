@@ -22,7 +22,7 @@ export function Header() {
             throw new Error('Erro ao deslogar, tente novamente')
         }
     }
-    console.log('user', user)
+
     return (
         <div className="relative h-24 px-10 py-2 border-b-2 bg-primary-darkGray border-primary-yellowNeon">
             <div className="flex items-center justify-between">

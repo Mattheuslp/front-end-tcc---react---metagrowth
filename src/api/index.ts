@@ -93,7 +93,7 @@ export async function getUserById(userId: string) {
     try {
         console.log('oi')
 
-        const response = await api.get('/getUserById', {
+        const response = await api.get('/fetchusers', {
             params: {userId}
         })
    
@@ -121,7 +121,11 @@ export async function deleteUser(userId: string) {
 export async function fetchUsersWithoutTeams() {
     try {
 
-        const response = await api.get('/fetchUsersWithoutTeams')
+        const response = await api.get('/fetchusers', {
+            params: {
+                noTeam: true
+            }
+        })
    
         return response.data
     } catch (error) {
@@ -132,7 +136,11 @@ export async function fetchUsersWithoutTeams() {
 export async function fetchUsersNotManagingTeams() {
     try {
 
-        const response = await api.get('/fetchUsersNotManagingTeams')
+        const response = await api.get('/fetchusers', {
+            params: {
+                notManagingTeam: true
+            }
+        })
    
         return response.data
     } catch (error) {
@@ -141,10 +149,10 @@ export async function fetchUsersNotManagingTeams() {
 }
 
 export async function fetchTeamById(teamId: string) {
-    console.log('tea', teamId)
+
     try {
 
-        const response = await api.get('/teamById', {
+        const response = await api.get('/teams', {
             params: {
                 teamId
             }
@@ -164,7 +172,7 @@ export interface Team {
 
 export async function createTeam(team: Team) {
     try {
-        const response = await api.post('/team', team);
+        const response = await api.post('/teams', team);
         return response;
     } catch (error: any) {
         if (error.response) {
@@ -194,7 +202,7 @@ export async function createTeam(team: Team) {
 export async function fetchTeams() {
     try {
 
-        const response = await api.get('/team')
+        const response = await api.get('/teams')
    
         return response.data
     } catch (error) {
@@ -203,3 +211,30 @@ export async function fetchTeams() {
 }
 
 
+export interface UpdateTeamData {
+    name?: string;
+    managerId: string;
+    userIds?: string[];
+}
+
+export async function updateTeam(teamId: string, teamData: UpdateTeamData) {
+    try {
+        const response = await api.patch(`/teams/${teamId}`, teamData);
+
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            const { status, data } = error.response;
+            
+            if (status === 400 && data.message === "Validation error") {
+                throw new Error("Erro de validação nos dados do time");
+            }
+
+            if (status === 404) {
+                throw new Error("Time não encontrado");
+            }
+        }
+
+        throw new Error("Houve um erro ao atualizar o time, contate o suporte");
+    }
+}

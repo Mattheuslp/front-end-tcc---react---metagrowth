@@ -6,7 +6,7 @@ import avatarPlaceholder from '../../../assets/avatar.png';
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
-import { useCreateUser } from "../../../lib/react-query/querysAndMuations";
+import { useCreateUser, useFetchTeams } from "../../../lib/react-query/querysAndMuations";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +31,7 @@ type CreateUserFormData = z.infer<typeof createUserSchema>;
 
 export function UserCreate() {
   const { mutateAsync: createUser } = useCreateUser();
+  const { data: teams } = useFetchTeams(); // Fetch teams data
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
 
@@ -112,13 +113,14 @@ export function UserCreate() {
               {errors.name && <span className="text-red-500">{errors.name.message}</span>}
             </div>
             <div className="flex flex-col gap-2 flex-1">
-              <Label htmlFor="teamID">Turma</Label>
-              <Input
-                id="teamID"
-                type="text"
-                {...register("teamID")}
-                className="rounded-full bg-white"
-              />
+              <Label htmlFor="teamID">Equipe</Label>
+              <select {...register("teamID")} className="rounded-full bg-white">
+                {teams?.map((team: any) => (
+                  <option key={team.id} value={team.id}>
+                    {team.name}
+                  </option>
+                ))}
+              </select>
               {errors.teamID && <span className="text-red-500">{errors.teamID.message}</span>}
             </div>
             <div className="flex flex-col gap-2">
