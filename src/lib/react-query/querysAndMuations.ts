@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CreateGoal, createGoal, createTeam, createUser, deleteGoal, deleteTeam, deleteUser, fetchGoals, fetchTeamById, fetchTeams, fetchUser, fetchUsersByManagerId, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getGoalById, getGoalsAchievedMetrics, getGoalsPendingMetrics, getGoalsPercentageMetrics, getGoalsTotalMetrics, getUserById, logout, signIn, Team, updateGoal, updateTeam, UpdateTeamData, updateUser } from "../../api";
+import { CreateFeedback, createFeedback, CreateGoal, createGoal, createTeam, createUser, deleteFeedback, deleteGoal, deleteTeam, deleteUser, fetchGoals, fetchTeamById, fetchTeams, fetchUser, fetchUsersByManagerId, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getAllFeedbacks, getFeedbackById, getGoalById, getGoalsAchievedMetrics, getGoalsPendingMetrics, getGoalsPercentageMetrics, getGoalsTotalMetrics, getUserById, logout, signIn, Team, updateFeedback, updateGoal, updateTeam, UpdateTeamData, updateUser } from "../../api";
 import { queryClient } from "./reactQuery";
 
 
@@ -226,4 +226,55 @@ export const useGetGoalsPercentageMetrics = () => {
         queryKey: ['GetGoalsPercentageMetric'],
         queryFn: () => getGoalsPercentageMetrics(),
     });
+}
+
+
+export const useCreateFeedback = () => {
+    return useMutation({
+        mutationFn: (data: CreateFeedback) => createFeedback(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['fetchFeedbacks'] });
+            queryClient.invalidateQueries({ queryKey: ['getFeedback'] });
+        },
+    });
+};
+
+export const useGetAllFeedback = () => {
+    return useQuery({
+        queryKey: ['GetAllFeedbacks'],
+        queryFn: () => getAllFeedbacks(),
+    });
+}
+
+export const useGetFeedbackById = (id: string) => {
+    return useQuery({
+        queryKey: ['getFeedback', id],
+        queryFn: () => {
+            if (id) {
+                return getFeedbackById(id);
+            }
+            return Promise.reject('Id do feedback não está definido');
+        },
+        enabled: !!id,
+    });
+}
+
+export const useDeleteFeedback = () => {
+    return useMutation({
+        mutationFn: (id: string) => deleteFeedback(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['GetAllFeedbacks']
+            })
+        }
+    })
+}
+
+export const useUpdateFeedback = () => {
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string, data: updateFeedback }) => updateFeedback(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['GetAllFeedbacks'] });
+        },
+    })
 }

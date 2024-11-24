@@ -16,7 +16,7 @@ export async function logout() {
     try {
         const session = await api.delete('/logout')
         localStorage.removeItem('token');
-        window.location.replace('/login');
+        window.location.replace('/auth/login');
         return session
     } catch (error) {
         throw new Error('Ocorreu um erro ao te deslogar, por favor tente novamente')
@@ -451,6 +451,78 @@ export async function getGoalsPercentageMetrics() {
                 metric: 'percentage'
             }
         })
+
+        return response.data
+    } catch (error: any) {
+
+        throw new Error("Houve um erro, contate o administrador do sistema")
+    }
+}
+
+export interface CreateFeedback {
+    userId: string
+    technicalSkill: number;
+    resilience: number;
+    sociability: number;
+    description: string
+}
+
+export async function createFeedback(data: CreateFeedback) {
+    try {
+        const response = await api.post('/feedbacks', data);
+        return response;
+
+    } catch (error: any) {
+        throw new Error("Houve uma falha ao criar uma meta, favor contatar o suporte");
+    }
+}
+
+export interface updateFeedback {
+    userId?: string
+    technicalSkill?: number;
+    resilience?: number;
+    sociability?: number;
+    description?: string
+}
+
+export async function updateFeedback(id: string, data: updateFeedback) {
+    try {
+        const response = await api.patch(`/feedbacks/${id}`, data);
+        return response.data;
+
+    } catch (error: any) {
+        throw new Error("Houve uma falha ao criar uma meta, favor contatar o suporte");
+    }
+}
+
+export async function deleteFeedback(id: string) {
+    try {
+        const response = await api.delete(`/feedbacks/${id}`);
+
+        return response.data;
+    } catch (error: any) {
+
+        throw new Error("Houve um erro ao deletar um feedback, contate o suporte");
+    }
+}
+
+export async function getFeedbackById(id: string) {
+    try {
+
+        const response = await api.get(`/feedbacks/${id}`)
+
+        return response.data
+    } catch (error: any) {
+
+        throw new Error("Houve um erro, contate o administrador do sistema")
+    }
+}
+
+
+export async function getAllFeedbacks() {
+    try {
+
+        const response = await api.get(`/feedbacks`)
 
         return response.data
     } catch (error: any) {

@@ -10,6 +10,7 @@ import { UserEdit } from "./pages/app/management/UserEdit";
 import { TeamEdit } from "./pages/app/management/TeamEdit";
 import { ManagerLayout } from "./pages/_layouts/ManagerLayout";
 import { GoalEdit } from "./pages/app/goals/GoalEdit";
+import { FeedbackEdit } from "./pages/app/Feedbacks/FeedBackEdit";
 
 
 export const router = createBrowserRouter([
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/metas", element: <Goals /> },
       { path: "/feedbacks", element: <Feedbacks /> },
+      { path: "/edicao/feedback/:feedbackId", element: <FeedbackEdit /> },
       {
         element: <ManagerLayout allowedRoles={["MANAGER"]} />,
         children: [

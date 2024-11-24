@@ -18,9 +18,9 @@ const createUserSchema = z.object({
     name: z.string().min(1, "Nome é obrigatório"),
     email: z.string().email("E-mail inválido"),
     admission_date: z.string().optional(),
-    bio: z.string().optional(),
-    certifications: z.string().optional(),
-    education: z.string().optional(),
+    bio: z.string().nullable().optional(),
+    certifications: z.string().nullable().optional(),
+    education: z.string().nullable().optional(),
     enrollment: z.string().optional(),
     phone: z.string().optional(),
     role: z.enum(["MANAGER", "MEMBER"]),
@@ -80,39 +80,41 @@ export function UserEdit() {
         }
     };
 
-    async function handleUpdateUser(data: CreateUserFormData) {
-        console.log('aaa', data)
-        try {
-            if (!userId) {
-                throw new Error("User ID is missing");
-            }
 
-            const formattedData = {
-                ...data,
-                teamId: data.teamId || null,
-            };
-
-            const formData = new FormData();
-
-            Object.entries(formattedData).forEach(([key, value]) => {
-                if (value !== undefined && value !== null && value !== "") {
-                    formData.append(key, value as string);
-                }
-            });
-
-            if (selectedImage) {
-                formData.append("file", selectedImage);
-            } else {
-                formData.append("file", "");
-            }
-
-            await updateUser({ userId, user: formData });
-
-            toast.success("Usuário atualizado com sucesso");
-        } catch (error: any) {
-            toast.error(error.message);
+async function handleUpdateUser(data: CreateUserFormData) {
+    console.log("Dados enviados:", data);
+    try {
+        if (!userId) {
+            throw new Error("User ID is missing");
         }
+
+        const formattedData = {
+            ...data,
+            teamId: selectedRole === "MANAGER" ? null : data.teamId || null, 
+        };
+
+        const formData = new FormData();
+
+        Object.entries(formattedData).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== "") {
+                formData.append(key, value as string);
+            }
+        });
+
+        if (selectedImage) {
+            formData.append("file", selectedImage);
+        } else {
+            formData.append("file", "");
+        }
+
+        await updateUser({ userId, user: formData });
+        toast.success("Usuário atualizado com sucesso");
+    } catch (error: any) {
+        toast.error(error.message);
     }
+}
+
+
 
     return (
         <div className="bg-black p-10">
@@ -120,7 +122,7 @@ export function UserEdit() {
                 <h1 className="text-primary-yellowNeon text-xl">Edição</h1>
                 <div className="bg-primary-darkGray w-full h-[1px]"></div>
             </div>
-            <form onSubmit={handleSubmit(handleUpdateUser)}>
+            <form   onSubmit={handleSubmit(handleUpdateUser)}>
                 <div className="flex justify-end mb-5">
                     <ButtonIcon icon={IoIosSave} text="Salvar" type="submit" />
                 </div>

@@ -11,13 +11,15 @@ import { ProfileSummary } from "../../../components/ProfileSummary";
 import { Link } from "react-router-dom";
 import { TeamCreate } from "./TeamCreate";
 import toast from "react-hot-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../../../components/ui/alert-dialog";
+import { Button } from "../../../components/ui/button";
 
 export function Management() {
     const { data: users } = useFetchUsers();
     const { mutateAsync: deleteUser } = useDeleteUser()
     const { mutateAsync: deleteTeam } = useDeleteTeam()
     const { data: teams } = useFetchTeams()
-
+    console.log('users', users)
 
     const handleTeamDelete = async (teamId: string) => {
         try {
@@ -55,18 +57,46 @@ export function Management() {
                     </Dialog>
                 </div>
                 <div className="bg-primary-yellowNeon w-full h-1"></div>
-                <div className="flex flex-col gap-4 pt-6">
+                <div className="flex flex-col gap-2 pt-6">
                     {teams && teams.map((item: any) => (
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 ">
                             <Link to={`/edicao/equipe/${item.id}`}>
-                                <h1 className="rounded-full px-16 text-primary-darkGray border border-primary-darkGray">{item.name}</h1>
+                                <h1 className="flex justify-center rounded-full px-16 text-primary-darkGray border border-primary-darkGray max-w-8 w-full ">{item.name}</h1>
                             </Link>
-                            <MdDeleteForever
-                                size={25}
-                                className="cursor-pointer"
-                                onClick={() => handleTeamDelete(item.id)}
-                                color="white"
-                            />
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button>
+                                        <MdDeleteForever
+                                            size={25}
+                                            className="cursor-pointer"
+                                            color="white"
+                                        />
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Você tem certeza?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Essa ação não pode ser
+                                            desfeita. Isso vai remover os
+                                            dados de forma permanente em
+                                            nossos servidores.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Cancelar
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction
+                                             onClick={() => handleTeamDelete(item.id)}
+                                        >
+                                            Continuar
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </div>
                     ))}
                 </div>
@@ -105,9 +135,9 @@ export function Management() {
                                             position={item.role}
                                         />
                                     </TableCell>
-                                    <TableCell>0</TableCell>
-                                    <TableCell>0</TableCell>
-                                    <TableCell>0</TableCell>
+                                    <TableCell>{item?.totalGoals}</TableCell>
+                                    <TableCell>{item?.achievedGoals}</TableCell>
+                                    <TableCell>{item?.completedPercentage}%</TableCell>
                                     <TableCell>
                                         <div className="flex gap-2">
                                             <Link to={`/edicao/usuario/${item.id}`}>
@@ -116,11 +146,39 @@ export function Management() {
                                                     className="cursor-pointer"
                                                 />
                                             </Link>
-                                            <MdDeleteForever
-                                                size={25}
-                                                className="cursor-pointer"
-                                                onClick={() => handleUserDelete(item.id)}
-                                            />
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button>
+                                                        <MdDeleteForever
+                                                            size={25}
+                                                            className="cursor-pointer"
+                                                        />
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Você tem certeza?
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Essa ação não pode ser
+                                                            desfeita. Isso vai remover os
+                                                            dados de forma permanente em
+                                                            nossos servidores.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancelar
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => handleUserDelete(item.id)}
+                                                        >
+                                                            Continuar
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
                                         </div>
                                     </TableCell>
                                 </TableRow>

@@ -17,12 +17,13 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "../../../components/ui/button";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
+import { useUserContext } from "../../../context/AuthContext";
 
 export function Goals() {
     const { data: initialGoals = [] } = useFetchGoals();
     const { mutateAsync: deleteGoal } = useDeleteGoal();
     const { mutateAsync: updateGoal } = useUpdateGoal();
-
+    const { user } = useUserContext()
 
     const [goals, setGoals] = useState(initialGoals);
 
@@ -114,9 +115,16 @@ export function Goals() {
                         <TableHead className="w-[140px] border-b-4 border-primary-darkGray">
                             Conclusão
                         </TableHead>
-                        <TableHead className="w-[140px] border-b-4 border-primary-darkGray">
-                            Gestão
-                        </TableHead>
+                        {user.role === "MANAGER" ? (
+                            <TableHead className="w-[140px] border-b-4 border-primary-darkGray">
+                                Gestão
+                            </TableHead>
+                        ) : (
+                            <TableHead className="w-[140px] border-b-4 border-primary-darkGray">
+                                
+                            </TableHead>
+                        )}
+
                     </TableRow>
                 </TableHeader>
                 <TableBody className="text-red-50">
@@ -144,50 +152,55 @@ export function Goals() {
                                     }
                                 />
                             </TableCell>
-                            <TableCell>
-                                <div className="flex gap-2">
-                                    <Link to={`/edicao/goal/${goal.id}`}>
-                                        <FaRegEdit
-                                            size={25}
-                                            className="cursor-pointer"
-                                        />
-                                    </Link>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button>
-                                                <MdDeleteForever
-                                                    size={25}
-                                                    className="cursor-pointer"
-                                                />
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    Você tem certeza?
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    Essa ação não pode ser
-                                                    desfeita. Isso vai remover os
-                                                    dados de forma permanente em
-                                                    nossos servidores.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>
-                                                    Cancelar
-                                                </AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={() =>
-                                                        handleGoalDelete(goal.id)
-                                                    }
-                                                >
-                                                    Continuar
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </div>
+                            <TableCell >
+                                {user.role === "MANAGER" ? (
+                                    <div className="flex gap-2">
+                                        <Link to={`/edicao/goal/${goal.id}`}>
+                                            <FaRegEdit
+                                                size={25}
+                                                className="cursor-pointer"
+                                            />
+                                        </Link>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button className="mt-[-4px]">
+                                                    <MdDeleteForever
+                                                        size={25}
+                                                        className="cursor-pointer "
+                                                    />
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>
+                                                        Você tem certeza?
+                                                    </AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        Essa ação não pode ser
+                                                        desfeita. Isso vai remover os
+                                                        dados de forma permanente em
+                                                        nossos servidores.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>
+                                                        Cancelar
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        onClick={() =>
+                                                            handleGoalDelete(goal.id)
+                                                        }
+                                                    >
+                                                        Continuar
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </div>
+                                ) : (
+                                    <span></span>
+                                )}
+
                             </TableCell>
                         </TableRow>
                     ))}
