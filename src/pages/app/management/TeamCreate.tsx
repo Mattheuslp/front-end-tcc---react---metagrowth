@@ -76,11 +76,14 @@ export function TeamCreate() {
             await createTeam(teamData)
 
             toast.success('Equipe criado com sucesso')
+
+            setSelectedMembers([]);
+            setSelectedManager("");
+            setSelectedUser("");
+            reset();
         } catch (error: any) {
             toast.error(error.message)
-        } finally {
-            reset()
-        }
+        } 
     };
 
     return (

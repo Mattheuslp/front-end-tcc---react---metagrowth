@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createTeam, createUser, deleteUser, fetchTeamById, fetchTeams, fetchUser, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getUserById, logout, signIn, Team, updateTeam, UpdateTeamData, updateUser} from "../../api";
+import { CreateGoal, createGoal, createTeam, createUser, deleteGoal, deleteTeam, deleteUser, fetchGoals, fetchTeamById, fetchTeams, fetchUser, fetchUsersByManagerId, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getGoalById, getGoalsAchievedMetrics, getGoalsPendingMetrics, getGoalsPercentageMetrics, getGoalsTotalMetrics, getUserById, logout, signIn, Team, updateGoal, updateTeam, UpdateTeamData, updateUser } from "../../api";
 import { queryClient } from "./reactQuery";
 
 
@@ -21,24 +21,24 @@ export const useCreateUser = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['fetchUsers']
-              })
+            })
         }
     })
 }
 
 export const useUpdateUser = () => {
     return useMutation({
-        mutationFn: (user: FormData) => updateUser(user),
+        mutationFn: ({ userId, user }: { userId: string, user: FormData }) => updateUser(userId, user),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['updateUsers']
-              })
+                queryKey: ['fetchUsers']
+            })
         }
     })
 }
 
 export const useFetchUsers = () => {
-    return  useQuery({
+    return useQuery({
         queryKey: ['fetchUsers'],
         queryFn: () => fetchUser(),
     });
@@ -51,9 +51,9 @@ export const useGetUserById = (id?: string) => {
             if (id) {
                 return getUserById(id);
             }
-            return Promise.reject('User ID is not defined');
+            return Promise.reject('Id do usuário não está definido');
         },
-        enabled: !!id, 
+        enabled: !!id,
     });
 }
 
@@ -63,7 +63,7 @@ export const useDeleteUser = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['fetchUsers']
-              })
+            })
         }
     })
 }
@@ -82,6 +82,13 @@ export const useFetchUsersNotManagingTeams = () => {
     });
 }
 
+export const useFetchUsersByManagerId = () => {
+    return useQuery({
+        queryKey: ['fetchUserByManagerId'],
+        queryFn: () => fetchUsersByManagerId()
+    });
+}
+
 
 
 export const useCreateTeam = () => {
@@ -90,7 +97,7 @@ export const useCreateTeam = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['fetchTeams']
-              })
+            })
         }
     })
 }
@@ -109,7 +116,7 @@ export const useFetchTeamById = (teamId?: string) => {
             if (teamId) {
                 return fetchTeamById(teamId);
             }
-            return Promise.reject('User ID is not defined');
+            return Promise.reject('Id do usuário não está definido');
         },
         enabled: !!teamId
     });
@@ -117,11 +124,106 @@ export const useFetchTeamById = (teamId?: string) => {
 
 export const useUpdateTeam = () => {
     return useMutation({
-        mutationFn: ({teamId, teamData}: {teamId: string, teamData: UpdateTeamData}) => updateTeam(teamId, teamData),
+        mutationFn: ({ teamId, teamData }: { teamId: string, teamData: UpdateTeamData }) => updateTeam(teamId, teamData),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['fetchTeams']
-              })
+            })
         }
     })
+}
+
+export const useDeleteTeam = () => {
+    return useMutation({
+        mutationFn: (teamId: string) => deleteTeam(teamId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['fetchTeams']
+            })
+        }
+    })
+}
+
+
+export const useCreateGoal = () => {
+    return useMutation({
+        mutationFn: (data: CreateGoal) => createGoal(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['fetchGoals'] });
+            queryClient.invalidateQueries({ queryKey: ['GetGoalsAchievedMetric'] });
+            queryClient.invalidateQueries({ queryKey: ['GetGoalsTotalMetric'] });
+            queryClient.invalidateQueries({ queryKey: ['GetGoalsPendingMetric'] });
+        },
+    });
+};
+
+export const useFetchGoals = () => {
+    return useQuery({
+        queryKey: ['fetchGoals'],
+        queryFn: () => fetchGoals(),
+    });
+}
+
+export const useGetGoalById = (goalId: string) => {
+    return useQuery({
+        queryKey: ['getGoalById', goalId],
+        queryFn: () => {
+            if (goalId) {
+                return getGoalById(goalId);
+            }
+            return Promise.reject('Id da meta não está definido');
+        },
+        enabled: !!goalId,
+    });
+}
+
+export const useUpdateGoal = () => {
+    return useMutation({
+        mutationFn: ({ goalId, data }: { goalId: string, data: Partial<updateGoal> }) => updateGoal(goalId, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['GetGoalsAchievedMetric'] });
+            queryClient.invalidateQueries({ queryKey: ['GetGoalsTotalMetric'] });
+            queryClient.invalidateQueries({ queryKey: ['GetGoalsPendingMetric'] });
+            queryClient.invalidateQueries({ queryKey: ['GetGoalsPercentageMetric'] });
+        },
+    })
+}
+
+export const useDeleteGoal = () => {
+    return useMutation({
+        mutationFn: (goalId: string) => deleteGoal(goalId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['fetchGoals']
+            })
+        }
+    })
+}
+
+export const useGetGoalsAchievedMetrics = () => {
+    return useQuery({
+        queryKey: ['GetGoalsAchievedMetric'],
+        queryFn: () => getGoalsAchievedMetrics(),
+    });
+}
+
+export const useGetGoalsTotalMetrics = () => {
+    return useQuery({
+        queryKey: ['GetGoalsTotalMetric'],
+        queryFn: () => getGoalsTotalMetrics(),
+    });
+}
+
+export const useGetGoalsPendingMetrics = () => {
+    return useQuery({
+        queryKey: ['GetGoalsPendingMetric'],
+        queryFn: () => getGoalsPendingMetrics(),
+    });
+}
+
+export const useGetGoalsPercentageMetrics = () => {
+    return useQuery({
+        queryKey: ['GetGoalsPercentageMetric'],
+        queryFn: () => getGoalsPercentageMetrics(),
+    });
 }

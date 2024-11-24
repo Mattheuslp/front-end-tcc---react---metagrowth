@@ -26,7 +26,7 @@ interface UserWithoutTeam {
 
 export function TeamEdit() {
     const { teamId } = useParams();
-    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<CreateTeamFormData>({
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm<CreateTeamFormData>({
         resolver: zodResolver(createTeamSchema),
     });
 
@@ -40,7 +40,7 @@ export function TeamEdit() {
     useEffect(() => {
         if (teamData) {
             setValue("name", teamData.name);
-            setValue("manager", teamData.manager?.id || ""); // Define o valor inicial de "manager"
+            setValue("manager", teamData.manager?.id || "");
             setSelectedMembers(teamData.Users || []);
         }
     }, [teamData, setValue]);
@@ -58,6 +58,7 @@ export function TeamEdit() {
     };
 
     const handleSave: SubmitHandler<CreateTeamFormData> = async ({ name, manager }) => {
+     
         try {
             const teamData = {
                 name,
@@ -104,8 +105,8 @@ export function TeamEdit() {
                         <Label htmlFor="manager">Gestor da Equipe</Label>
                         <select
                             id="manager"
-                            {...register("manager")} // Gerenciado pelo react-hook-form
-                            onChange={(e) => setValue("manager", e.target.value)} // Define o valor manualmente
+                            {...register("manager")} 
+                            onChange={(e) => setValue("manager", e.target.value)} 
                             className="rounded-full bg-white p-2"
                         >
                             <option value="">Selecione um gestor</option>

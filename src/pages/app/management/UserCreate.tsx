@@ -11,7 +11,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const createUserSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -31,17 +31,29 @@ type CreateUserFormData = z.infer<typeof createUserSchema>;
 
 export function UserCreate() {
   const { mutateAsync: createUser } = useCreateUser();
-  const { data: teams } = useFetchTeams(); // Fetch teams data
+  const { data: teams } = useFetchTeams(); 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
+    watch,
+    setValue, 
     formState: { errors },
   } = useForm<CreateUserFormData>({
     resolver: zodResolver(createUserSchema),
+    defaultValues: { role: "MANAGER" }, 
   });
+
+  const selectedRole = watch("role"); 
+
+  
+  useEffect(() => {
+    if (selectedRole === "MANAGER") {
+      setValue("teamID", ""); 
+    }
+  }, [selectedRole, setValue]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -77,7 +89,7 @@ export function UserCreate() {
   }
 
   return (
-    <DialogContent className="bg-black ">
+    <DialogContent className="bg-black">
       <DialogHeader className="flex flex-col gap-2">
         <DialogTitle className="text-primary-yellowNeon">Novo Colaborador</DialogTitle>
         <div className="bg-primary-darkGray w-full h-[1px]"></div>
@@ -87,7 +99,7 @@ export function UserCreate() {
           <ButtonIcon icon={IoIosSave} text="Salvar" type="submit" />
         </div>
         <div className="flex flex-col justify-center gap-3 mt-1 p-5 bg-primary-darkGray rounded-2xl">
-          <div className="flex gap-5 ">
+          <div className="flex gap-5">
             <div className="flex flex-col items-center">
               <label htmlFor="avatar-upload">
                 <Avatar className="h-20 w-20 cursor-pointer">
@@ -114,7 +126,12 @@ export function UserCreate() {
             </div>
             <div className="flex flex-col gap-2 flex-1">
               <Label htmlFor="teamID">Equipe</Label>
-              <select {...register("teamID")} className="rounded-full bg-white">
+              <select
+                {...register("teamID")}
+                className="rounded-full bg-white h-9"
+                disabled={selectedRole === "MANAGER"} 
+              >
+                <option value="">Selecione uma equipe</option>
                 {teams?.map((team: any) => (
                   <option key={team.id} value={team.id}>
                     {team.name}
@@ -125,7 +142,14 @@ export function UserCreate() {
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="role">Função</Label>
-              <Input id="role" type="text" {...register("role")} className="rounded-full bg-white" />
+              <select
+                id="role"
+                {...register("role")}
+                className="rounded-full bg-white h-9"
+              >
+                <option value="MANAGER">Gerente</option>
+                <option value="MEMBER">Membro</option>
+              </select>
               {errors.role && <span className="text-red-500">{errors.role.message}</span>}
             </div>
             <div className="flex flex-col gap-2">

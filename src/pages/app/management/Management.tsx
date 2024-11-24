@@ -1,25 +1,42 @@
 import { FaUsersGear } from "react-icons/fa6";
-import { Dialog, DialogTrigger, DialogContent } from "../../../components/ui/dialog";
+import { Dialog, DialogTrigger } from "../../../components/ui/dialog";
 import { ButtonIcon } from "../../../components/ButtonIcon";
 import { FaCircleUser } from "react-icons/fa6";
 import { UserCreate } from "./UserCreate";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
-import { useDeleteUser, useFetchTeams, useFetchUsers } from "../../../lib/react-query/querysAndMuations";
+import { useDeleteTeam, useDeleteUser, useFetchTeams, useFetchUsers } from "../../../lib/react-query/querysAndMuations";
 import { ProfileSummary } from "../../../components/ProfileSummary";
 import { Link } from "react-router-dom";
 import { TeamCreate } from "./TeamCreate";
+import toast from "react-hot-toast";
 
 export function Management() {
     const { data: users } = useFetchUsers();
     const { mutateAsync: deleteUser } = useDeleteUser()
+    const { mutateAsync: deleteTeam } = useDeleteTeam()
     const { data: teams } = useFetchTeams()
 
-    console.log('tea', teams)
 
-    const handleDelete = (userId: string) => {
-        deleteUser(userId)
+    const handleTeamDelete = async (teamId: string) => {
+        try {
+            await deleteTeam(teamId)
+            toast.success('Time excluído com sucesso!')
+        } catch (error: any) {
+            toast.error(error.message || 'Erro ao excluir a equipe');
+        }
+    }
+
+
+    const handleUserDelete = async (userId: string) => {
+        try {
+            await deleteUser(userId)
+            toast.success('Usuário excluído com sucesso!')
+        } catch (error: any) {
+            toast.error(error.message || 'Erro ao excluir o usuário');
+        }
+
     };
 
     return (
@@ -40,9 +57,17 @@ export function Management() {
                 <div className="bg-primary-yellowNeon w-full h-1"></div>
                 <div className="flex flex-col gap-4 pt-6">
                     {teams && teams.map((item: any) => (
-                        <Link to={`/edicao/equipe/${item.id}`}>
-                            <h1 className="rounded-full px-16 text-primary-darkGray border border-primary-darkGray">{item.name}</h1>
-                        </Link>
+                        <div className="flex gap-2">
+                            <Link to={`/edicao/equipe/${item.id}`}>
+                                <h1 className="rounded-full px-16 text-primary-darkGray border border-primary-darkGray">{item.name}</h1>
+                            </Link>
+                            <MdDeleteForever
+                                size={25}
+                                className="cursor-pointer"
+                                onClick={() => handleTeamDelete(item.id)}
+                                color="white"
+                            />
+                        </div>
                     ))}
                 </div>
             </section>
@@ -94,7 +119,7 @@ export function Management() {
                                             <MdDeleteForever
                                                 size={25}
                                                 className="cursor-pointer"
-                                                onClick={() => handleDelete(item.id)}
+                                                onClick={() => handleUserDelete(item.id)}
                                             />
                                         </div>
                                     </TableCell>

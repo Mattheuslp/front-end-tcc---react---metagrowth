@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "../lib/axios";
 
 export const INITIAL_USER = {
+    id: '',
     name: '',
     email: '',
     position: '',

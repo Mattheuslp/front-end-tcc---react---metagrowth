@@ -24,27 +24,32 @@ const createUserSchema = z.object({
     enrollment: z.string().optional(),
     phone: z.string().optional(),
     role: z.enum(["MANAGER", "MEMBER"]),
-    teamID: z.string().optional(),
+    teamId: z.string().nullable().optional(),
+    password: z.string().optional()
 });
+
 
 type CreateUserFormData = z.infer<typeof createUserSchema>;
 
 export function UserEdit() {
     const { userId } = useParams();
     const { data: user } = useGetUserById(userId);
-    const { mutateAsync: updateUser } = useUpdateUser()
+    const { mutateAsync: updateUser } = useUpdateUser();
     const { data: teams } = useFetchTeams();
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
-    console.log('ussss', user)
+
     const {
         register,
         handleSubmit,
         setValue,
+        watch,
         formState: { errors },
     } = useForm<CreateUserFormData>({
         resolver: zodResolver(createUserSchema),
     });
+
+    const selectedRole = watch("role");
 
     useEffect(() => {
         if (user) {
@@ -58,7 +63,7 @@ export function UserEdit() {
             setValue("enrollment", user.enrollment);
             setValue("phone", user.phone);
             setValue("role", user.role);
-            setValue("teamID", user.teamId);
+            setValue("teamId", user.teamId);
 
             if (user.imageUrl) {
                 setPreviewImageUrl(user.imageUrl);
@@ -74,41 +79,40 @@ export function UserEdit() {
             setPreviewImageUrl(imageUrl);
         }
     };
-    
+
     async function handleUpdateUser(data: CreateUserFormData) {
+        console.log('aaa', data)
         try {
-            const formData = new FormData();
-    
-            if (userId) {
-                formData.append("userId", userId);
-            } else {
+            if (!userId) {
                 throw new Error("User ID is missing");
             }
-    
-            Object.entries(data).forEach(([key, value]) => {
+
+            const formattedData = {
+                ...data,
+                teamId: data.teamId || null,
+            };
+
+            const formData = new FormData();
+
+            Object.entries(formattedData).forEach(([key, value]) => {
                 if (value !== undefined && value !== null && value !== "") {
                     formData.append(key, value as string);
                 }
             });
-    
-           
+
             if (selectedImage) {
                 formData.append("file", selectedImage);
             } else {
-               
                 formData.append("file", "");
             }
-    
-            await updateUser(formData);
-    
-            toast.success('Usuário atualizado com sucesso');
-    
+
+            await updateUser({ userId, user: formData });
+
+            toast.success("Usuário atualizado com sucesso");
         } catch (error: any) {
             toast.error(error.message);
         }
     }
-    
-    
 
     return (
         <div className="bg-black p-10">
@@ -148,20 +152,32 @@ export function UserEdit() {
                         </div>
 
                         <div className="flex flex-col gap-2 flex-1">
-                            <Label htmlFor="teamID">Equipe</Label>
-                            <select {...register("teamID")} className="rounded-full bg-white">
+                            <Label htmlFor="teamId">Equipe</Label>
+                            <select
+                                {...register("teamId")}
+                                className="rounded-full bg-white h-9"
+                                disabled={selectedRole === "MANAGER"}
+                            >
+                                <option value="">Selecione uma equipe</option>
                                 {teams?.map((team: any) => (
                                     <option key={team.id} value={team.id}>
                                         {team.name}
                                     </option>
                                 ))}
                             </select>
-                            {errors.teamID && <span className="text-red-500">{errors.teamID.message}</span>}
+                            {errors.teamId && <span className="text-red-500">{errors.teamId.message}</span>}
                         </div>
 
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="role">Função</Label>
-                            <Input id="role" type="text" {...register("role")} className="rounded-full bg-white" />
+                            <select
+                                id="role"
+                                {...register("role")}
+                                className="rounded-full bg-white h-9"
+                            >
+                                <option value="MANAGER">Gerente</option>
+                                <option value="MEMBER">Membro</option>
+                            </select>
                             {errors.role && <span className="text-red-500">{errors.role.message}</span>}
                         </div>
 
@@ -183,6 +199,16 @@ export function UserEdit() {
                             {errors.email && <span className="text-red-500">{errors.email.message}</span>}
                         </div>
                         <div className="flex flex-col gap-2">
+                            <Label htmlFor="password">Senha</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                {...register("password")}
+                                className="rounded-full bg-white"
+                            />
+                            {errors.password && <span className="text-red-500">{errors.password.message}</span>}
+                        </div>
+                        <div className="flex flex-col gap-2">
                             <Label htmlFor="phone">Telefone</Label>
                             <Input id="phone" type="text" {...register("phone")} className="rounded-full bg-white" />
                         </div>
@@ -190,10 +216,7 @@ export function UserEdit() {
                             <Label htmlFor="enrollment">Matricula</Label>
                             <Input id="enrollment" type="text" {...register("enrollment")} className="rounded-full bg-white" />
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="education">Escolaridade</Label>
-                            <Input id="education" type="text" {...register("education")} className="rounded-full bg-white" />
-                        </div>
+
                     </div>
 
                     <div className="grid gap-5 grid-cols-[2fr_1fr]">

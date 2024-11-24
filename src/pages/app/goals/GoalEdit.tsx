@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../components/ui/avatar';
-import { DialogContent, DialogHeader, DialogTitle } from './../../../components/ui/dialog';
 import avatar from '../../../assets/avatar.png';
 import { Label } from '../../../components/ui/label';
 import { Input } from '../../../components/ui/input';
@@ -10,24 +11,31 @@ import { ButtonIcon } from '../../../components/ButtonIcon';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCreateGoal, useFetchUsersByManagerId } from '../../../lib/react-query/querysAndMuations';
+
 import toast from 'react-hot-toast';
+import { useGetGoalById, useFetchUsersByManagerId, useUpdateGoal, useDeleteGoal } from '../../../lib/react-query/querysAndMuations';
+import { useUserContext } from '../../../context/AuthContext';
 
 const goalSchema = z.object({
-    userId: z.string().min(1, 'Selecione um colaborador.'),
     title: z.string().min(1, 'O título da meta é obrigatório.'),
     startDate: z.string().min(1, 'A data de início é obrigatória.'),
     endDate: z.string().min(1, 'A data de fim é obrigatória.'),
     description: z.string().min(1, 'A descrição da meta é obrigatória.'),
     isCompleted: z.boolean().optional().default(false),
+    userId: z.string().min(1, 'Selecione um colaborador.'),
 });
 
 type GoalFormData = z.infer<typeof goalSchema>;
 
-export function GoalCreate() {
-    const { mutateAsync: createGoal } = useCreateGoal();
+export function GoalEdit() {
+    const { goalId } = useParams<{ goalId: string }>();
+    const { data: goal, isLoading } = useGetGoalById(goalId!);
     const { data: usersByManagerId } = useFetchUsersByManagerId();
-    console.log('usersByManagerId', usersByManagerId)
+    const { user } = useUserContext();
+    const { mutateAsync: updateGoal } = useUpdateGoal()
+    const isUserGoalOwner = goal?.userId === user?.id;
+   
+
     const {
         register,
         handleSubmit,
@@ -38,32 +46,45 @@ export function GoalCreate() {
         resolver: zodResolver(goalSchema),
         defaultValues: {
             isCompleted: false,
-        }
+        },
     });
 
-    const selectedUserId = watch('userId');
-    const currentUser = usersByManagerId?.find((user: any) => user.id === selectedUserId);
+    useEffect(() => {
+        if (goal) {
+            setValue('title', goal.title);
+            setValue('startDate', goal.startDate.split('T')[0]);
+            setValue('endDate', goal.endDate.split('T')[0]);
+            setValue('description', goal.description);
+            setValue('isCompleted', goal.isCompleted);
+            setValue('userId', goal.user?.id || '');
+        }
+    }, [goal, setValue]);
 
-    const handleGoalCreate = async (data: GoalFormData) => {
+    const handleGoalUpdate = async (data: GoalFormData) => {
         try {
-      
-            await createGoal(data);
-            toast.success('Meta criada com sucesso')
+            if (goalId) {
+                await updateGoal({ goalId, data })
+            }
+            toast.success('Meta atualizada com sucesso!');
         } catch (error: any) {
-
-            toast.error(error.message)
+            toast.error(error.message || 'Erro ao atualizar a meta');
         }
     };
 
+    if (isLoading) {
+        return <p>Carregando...</p>;
+    }
+
+
     return (
         <main>
-            <DialogContent className="bg-black">
-                <DialogHeader className="flex flex-col gap-2">
-                    <DialogTitle className="text-primary-yellowNeon">Nova Meta</DialogTitle>
+            <div className="bg-black">
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-primary-yellowNeon">Editar Meta</h1>
                     <div className="bg-primary-darkGray w-full h-[1px]"></div>
-                </DialogHeader>
+                </div>
                 <form
-                    onSubmit={handleSubmit(handleGoalCreate)}
+                    onSubmit={handleSubmit(handleGoalUpdate)}
                     className="flex flex-col justify-center gap-3 mt-1 p-5 bg-primary-darkGray rounded-2xl"
                 >
                     <div className="flex justify-end">
@@ -72,58 +93,51 @@ export function GoalCreate() {
 
                     <div className="flex gap-5">
                         <Avatar className="h-20 w-20">
-                            <AvatarImage src={currentUser?.imageUrl || ''} />
+                            <AvatarImage src={goal?.user?.imageUrl || ''} />
                             <AvatarFallback asChild>
                                 <img src={avatar} alt="avatar" className="bg-primary-darkGray" />
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col gap-2 flex-1">
                             <Label htmlFor="userId">Colaborador</Label>
-                            <select
-                                id="userId"
-                                {...register('userId')}
-                                className="rounded-full bg-white h-9"
-                                defaultValue=""
-                            >
-                                <option value="" disabled>
-                                    Selecione um colaborador
-                                </option>
-                                {usersByManagerId?.map((user: any) => (
-                                    <option key={user.id} value={user.id}>
-                                        {user.name}
+                            {isUserGoalOwner ? (
+                                <Input
+                                    id="userId"
+                                    type="text"
+                                    value={goal?.user?.name || ''}
+                                    readOnly
+                                    className="rounded-full bg-gray-300"
+                                />
+                            ) : (
+                                <select
+                                    id="userId"
+                                    {...register('userId')}
+                                    className="rounded-full bg-white h-9"
+                                >
+                                    <option value="" disabled>
+                                        Selecione um colaborador
                                     </option>
-                                ))}
-                            </select>
+                                    {usersByManagerId?.map((userOption: any) => (
+                                        <option key={userOption.id} value={userOption.id}>
+                                            {userOption.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                             {errors.userId && <span className="text-red-500">{errors.userId.message}</span>}
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="class">Turma</Label>
-                            <Input
-                                id="class"
-                                type="text"
-                                value={currentUser?.team?.name || ''}
-                                readOnly
-                                className="rounded-full bg-white"
-                            />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="role">Função</Label>
                             <Input
                                 id="role"
                                 type="text"
-                                value={currentUser?.role || ''}
+                                value={
+                                    usersByManagerId?.find(
+                                        (userOption: any) => userOption.id === watch('userId')
+                                    )?.role || goal?.user?.role || ''
+                                }
                                 readOnly
-                                className="rounded-full bg-white"
-                            />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="registration">Matrícula</Label>
-                            <Input
-                                id="registration"
-                                type="text"
-                                value={currentUser?.enrollment || ''}
-                                readOnly
-                                className="rounded-full bg-white"
+                                className="rounded-full bg-gray-300"
                             />
                         </div>
                     </div>
@@ -136,6 +150,7 @@ export function GoalCreate() {
                                 type="text"
                                 {...register('title')}
                                 className="rounded-full bg-white"
+                                disabled={isUserGoalOwner}
                             />
                             {errors.title && <span className="text-red-500">{errors.title.message}</span>}
                         </div>
@@ -146,6 +161,7 @@ export function GoalCreate() {
                                 type="date"
                                 {...register('startDate')}
                                 className="rounded-full bg-white"
+                                disabled={isUserGoalOwner}
                             />
                             {errors.startDate && <span className="text-red-500">{errors.startDate.message}</span>}
                         </div>
@@ -158,6 +174,7 @@ export function GoalCreate() {
                                 id="description"
                                 {...register('description')}
                                 className="h-24 rounded-2xl bg-white"
+                                disabled={isUserGoalOwner}
                             />
                             {errors.description && (
                                 <span className="text-red-500">{errors.description.message}</span>
@@ -170,6 +187,7 @@ export function GoalCreate() {
                                 type="date"
                                 {...register('endDate')}
                                 className="rounded-full bg-white"
+                                disabled={isUserGoalOwner}
                             />
                             {errors.endDate && <span className="text-red-500">{errors.endDate.message}</span>}
                             <div className="flex items-center gap-2 mt-2">
@@ -182,7 +200,7 @@ export function GoalCreate() {
                         </div>
                     </div>
                 </form>
-            </DialogContent>
+            </div>
         </main>
     );
 }
