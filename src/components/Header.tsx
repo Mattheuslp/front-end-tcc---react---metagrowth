@@ -37,7 +37,7 @@ export function Header() {
                                 <ProfileSummary
                                     imageUrl={user.imageUrl}
                                     name={user.name}
-                                    position={user.position}
+                                    role={user.role}
                                 />
                             </button>
                         </DropdownMenuTrigger>
