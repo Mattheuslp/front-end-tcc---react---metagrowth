@@ -11,7 +11,7 @@ import { TeamEdit } from "./pages/app/management/TeamEdit";
 import { ManagerLayout } from "./pages/_layouts/ManagerLayout";
 import { GoalEdit } from "./pages/app/goals/GoalEdit";
 import { FeedbackEdit } from "./pages/app/Feedbacks/FeedBackEdit";
-
+import { MemberLayout } from "./pages/_layouts/MemberLayout";
 
 export const router = createBrowserRouter([
   {
@@ -21,14 +21,22 @@ export const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/metas", element: <Goals /> },
       { path: "/feedbacks", element: <Feedbacks /> },
-      { path: "/edicao/feedback/:feedbackId", element: <FeedbackEdit /> },
+      {
+        element: <MemberLayout />,
+        children: [
+          { path: "/edicao/usuario/:userId", element: <UserEdit /> },
+          { path: "/edicao/goal/:goalId/:userId", element: <GoalEdit /> },
+          { path: "/edicao/feedback/:feedbackId/:userId", element: <FeedbackEdit /> },
+        ],
+      },
       {
         element: <ManagerLayout allowedRoles={["MANAGER"]} />,
         children: [
           { path: "/gestao", element: <Management /> },
           { path: "/edicao/usuario/:userId", element: <UserEdit /> },
           { path: "/edicao/equipe/:teamId", element: <TeamEdit /> },
-          { path: "/edicao/goal/:goalId", element: <GoalEdit /> },
+          { path: "/edicao/goal/:goalId/:userId", element: <GoalEdit /> },
+          { path: "/edicao/feedback/:feedbackId/:userId", element: <FeedbackEdit /> },
         ],
       },
     ],
@@ -36,8 +44,6 @@ export const router = createBrowserRouter([
   {
     path: "/auth",
     element: <AuthLayout />,
-    children: [
-      { path: "/auth/login", element: <Signin /> },
-    ],
+    children: [{ path: "/auth/login", element: <Signin /> }],
   },
 ]);

@@ -42,8 +42,9 @@ export function Header() {
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-primary-yellowNeon border-0 rounded-3xl p-4">
-                            <DropdownMenuItem >Meu perfil</DropdownMenuItem>
-                            <DropdownMenuItem>Alterar senha </DropdownMenuItem>
+                            <DropdownMenuItem >
+                                <NavLink to={`/edicao/usuario/${user.id}`} className="text-black">Meu perfil</NavLink>
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={handleLogout}>Sair</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

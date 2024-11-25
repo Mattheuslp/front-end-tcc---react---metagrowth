@@ -18,6 +18,7 @@ import { Button } from "../../../components/ui/button";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useUserContext } from "../../../context/AuthContext";
+import { IoMdOpen } from "react-icons/io";
 
 export function Goals() {
     const { data: initialGoals = [] } = useFetchGoals();
@@ -76,12 +77,18 @@ export function Goals() {
                         METAS
                     </h1>
                     <div className="flex justify-end">
-                        <Dialog>
-                            <DialogTrigger>
-                                <ButtonIcon icon={GoGoal} text="Nova meta" />
-                            </DialogTrigger>
-                            <GoalCreate />
-                        </Dialog>
+                        {user.role === "MANAGER" ? (
+                            <Dialog>
+                                <DialogTrigger>
+                                    <ButtonIcon icon={GoGoal} text="Nova meta" />
+                                </DialogTrigger>
+                                <GoalCreate />
+                            </Dialog>
+                        ): (
+                            <>
+                            </>
+                        )}
+
                     </div>
 
                 </div>
@@ -121,7 +128,7 @@ export function Goals() {
                             </TableHead>
                         ) : (
                             <TableHead className="w-[140px] border-b-4 border-primary-darkGray">
-                                
+
                             </TableHead>
                         )}
 
@@ -134,7 +141,7 @@ export function Goals() {
                                 <ProfileSummary
                                     imageUrl={goal.user.imageUrl}
                                     name={goal.user.name}
-                                    position={goal.user.role || "Colaborador"}
+                                    role={goal.user.role || "Colaborador"}
                                 />
                             </TableCell>
                             <TableCell>{goal.title}</TableCell>
@@ -153,14 +160,23 @@ export function Goals() {
                                 />
                             </TableCell>
                             <TableCell >
-                                {user.role === "MANAGER" ? (
-                                    <div className="flex gap-2">
-                                        <Link to={`/edicao/goal/${goal.id}`}>
+
+                                <div className="flex gap-2">
+
+                                    <Link to={`/edicao/goal/${goal.id}/${user.id}`}>
+                                        {user.role === "MANAGER" ? (
                                             <FaRegEdit
                                                 size={25}
                                                 className="cursor-pointer"
                                             />
-                                        </Link>
+                                        ) : (
+                                            <IoMdOpen
+                                                size={25}
+                                                className="cursor-pointer"
+                                            />
+                                        )}
+                                    </Link>
+                                    {user.role === "MANAGER" ? (
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button className="mt-[-4px]">
@@ -196,10 +212,10 @@ export function Goals() {
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
-                                    </div>
-                                ) : (
-                                    <span></span>
-                                )}
+                                    ) : (
+                                        <span></span>
+                                    )}
+                                </div>
 
                             </TableCell>
                         </TableRow>

@@ -132,7 +132,7 @@ export function Management() {
                                         <ProfileSummary
                                             imageUrl={item.imageUrl}
                                             name={item.name}
-                                            position={item.role}
+                                            role={item.role}
                                         />
                                     </TableCell>
                                     <TableCell>{item?.totalGoals}</TableCell>

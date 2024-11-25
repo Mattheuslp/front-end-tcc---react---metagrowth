@@ -41,12 +41,18 @@ export function Feedbacks() {
             <section className="w-full mt-8">
                 <div className="flex justify-between">
                     <h1 className="text-primary-yellowNeon font-bold text-3xl">Feedbacks</h1>
-                    <Dialog>
-                        <DialogTrigger>
-                            <ButtonIcon icon={IoChatboxEllipsesOutline} text="Novo feedback" />
-                        </DialogTrigger>
-                        <FeedbackCreate />
-                    </Dialog>
+                    {user.role === "MANAGER" ? (
+                        <Dialog>
+                            <DialogTrigger>
+                                <ButtonIcon icon={IoChatboxEllipsesOutline} text="Novo feedback" />
+                            </DialogTrigger>
+                            <FeedbackCreate />
+                        </Dialog>
+                    ): (
+                        <>
+                        </>
+                    )}
+
                 </div>
                 <div className="bg-primary-yellowNeon w-full h-1 mt-5"></div>
 
@@ -67,11 +73,11 @@ export function Feedbacks() {
                         {feedback.map((fb: any) => (
                             <TableRow key={fb.id}>
                                 <TableCell>
-                                    <Link to={`/edicao/feedback/${fb.id}`}>
+                                    <Link to={`/edicao/feedback/${fb.id}/${user.id}`}>
                                         <ProfileSummary
                                             imageUrl={fb.user.imageUrl}
                                             name={fb.user.name}
-                                            position={fb.user.role || "Colaborador"}
+                                            role={fb.user.role || "Colaborador"}
                                         />
                                     </Link>
                                 </TableCell>
@@ -79,7 +85,7 @@ export function Feedbacks() {
                                     <TableCell>
 
                                         <div className="flex gap-2">
-                                            <Link to={`/edicao/feedback/${fb.id}`}>
+                                            <Link to={`/edicao/feedback/${fb.id}/${user.id}`}>
                                                 <FaRegEdit
                                                     size={25}
                                                     className="cursor-pointer "
