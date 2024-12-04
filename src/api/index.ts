@@ -530,3 +530,13 @@ export async function getAllFeedbacks() {
         throw new Error("Houve um erro, contate o administrador do sistema")
     }
 }
+
+export async function getGoalsReport() {
+    try {
+        const response = await api.get('/goals/reports')
+
+        return response.data
+    } catch (error) {
+        throw new Error("Houve um erro, contate o administrador do sistema")
+    }
+}

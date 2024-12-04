@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CreateFeedback, createFeedback, CreateGoal, createGoal, createTeam, createUser, deleteFeedback, deleteGoal, deleteTeam, deleteUser, fetchGoals, fetchTeamById, fetchTeams, fetchUser, fetchUsersByManagerId, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getAllFeedbacks, getFeedbackById, getGoalById, getGoalsAchievedMetrics, getGoalsPendingMetrics, getGoalsPercentageMetrics, getGoalsTotalMetrics, getUserById, logout, signIn, Team, updateFeedback, updateGoal, updateTeam, UpdateTeamData, updateUser } from "../../api";
+import { CreateFeedback, createFeedback, CreateGoal, createGoal, createTeam, createUser, deleteFeedback, deleteGoal, deleteTeam, deleteUser, fetchGoals, fetchTeamById, fetchTeams, fetchUser, fetchUsersByManagerId, fetchUsersNotManagingTeams, fetchUsersWithoutTeams, getAllFeedbacks, getFeedbackById, getGoalById, getGoalsAchievedMetrics, getGoalsPendingMetrics, getGoalsPercentageMetrics, getGoalsReport, getGoalsTotalMetrics, getUserById, logout, signIn, Team, updateFeedback, updateGoal, updateTeam, UpdateTeamData, updateUser } from "../../api";
 import { queryClient } from "./reactQuery";
 
 
@@ -277,4 +277,11 @@ export const useUpdateFeedback = () => {
             queryClient.invalidateQueries({ queryKey: ['GetAllFeedbacks'] });
         },
     })
+}
+
+export const useGetGoalsReport = () => {
+    return useQuery({
+        queryKey: ['GetGoalsReport'],
+        queryFn: () => getGoalsReport(),
+    });
 }

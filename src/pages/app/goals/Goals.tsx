@@ -14,6 +14,7 @@ import { ResultCard } from "./ResultCard";
 import { GoGoal } from "react-icons/go";
 import { MdDeleteForever } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
+import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Switch } from "./../../../components/ui/switch";
 import { Dialog, DialogTrigger } from "./../../../components/ui/dialog";
 import { GoalCreate } from "./GoalCreate";
@@ -40,6 +41,7 @@ import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useUserContext } from "../../../context/AuthContext";
 import { IoMdOpen } from "react-icons/io";
+import { GoalsReport } from "./GoalsReport";
 
 export function Goals() {
   const { data: initialGoals = [] } = useFetchGoals();
@@ -97,12 +99,20 @@ export function Goals() {
           <h1 className="text-primary-yellowNeon font-bold text-3xl">METAS</h1>
           <div className="flex justify-end">
             {user.role === "MANAGER" ? (
-              <Dialog>
-                <DialogTrigger>
-                  <ButtonIcon icon={GoGoal} text="Nova meta" />
-                </DialogTrigger>
-                <GoalCreate />
-              </Dialog>
+              <div className="flex  gap-2 justify-center items-center">
+                <Dialog>
+                  <DialogTrigger>
+                    <ButtonIcon icon={HiOutlineDocumentReport} text="Gerar relatório" />
+                  </DialogTrigger>
+                  <GoalsReport />
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger>
+                    <ButtonIcon icon={GoGoal} text="Nova meta" />
+                  </DialogTrigger>
+                  <GoalCreate />
+                </Dialog>
+              </div>
             ) : (
               <></>
             )}
