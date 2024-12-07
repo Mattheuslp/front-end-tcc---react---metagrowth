@@ -1,7 +1,16 @@
+
 import { useGetGoalsAchievedMetrics } from "../../../lib/react-query/querysAndMuations";
 
-export function GoalsAchievedCard() {
-  const { data: goalsAchievedMetrics } = useGetGoalsAchievedMetrics();
+
+
+export function GoalsAchievedCard({user}: any) {
+  let isManager = false
+
+  if(user) {
+    isManager = user.hasTeam
+  }
+
+  const { data: goalsAchievedMetrics } = useGetGoalsAchievedMetrics(isManager);
 
   return (
     <div className="flex gap-10 border-2 w-64 rounded-full p-5 text-primary-darkGray border-primary-darkGray  ">

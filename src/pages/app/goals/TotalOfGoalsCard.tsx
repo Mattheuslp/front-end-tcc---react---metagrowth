@@ -1,7 +1,14 @@
+
 import { useGetGoalsTotalMetrics } from "../../../lib/react-query/querysAndMuations"
 
-export function TotalOfGoalsCard() {
-    const {data: goalsTotalMetrics } = useGetGoalsTotalMetrics()
+export function TotalOfGoalsCard({user}: any) {
+    let isManager = false
+
+    if(user) {
+      isManager = user.hasTeam
+    }
+  
+    const {data: goalsTotalMetrics } = useGetGoalsTotalMetrics(isManager)
 
     console.log('ss', goalsTotalMetrics )
     return (

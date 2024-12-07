@@ -3,9 +3,15 @@ import {
   useGetGoalsPendingMetrics,
 } from "../../../lib/react-query/querysAndMuations";
 
-export function PendingCard() {
-  const { data: goalsPending } = useGetGoalsPendingMetrics();
-  const { data: goalsAchievedMetrics } = useGetGoalsAchievedMetrics();
+export function PendingCard({user}: any) {
+  let isManager = false
+
+  if(user) {
+    isManager = user.hasTeam
+  }
+
+  const { data: goalsPending } = useGetGoalsPendingMetrics(isManager);
+  const { data: goalsAchievedMetrics } = useGetGoalsAchievedMetrics(isManager);
 
   return (
     <div className="flex gap-10 border-2 w-64 rounded-full p-5 text-primary-darkGray border-primary-darkGray  ">

@@ -85,7 +85,7 @@ export function UserEdit() {
     async function handleUpdateUser(data: CreateUserFormData) {
         try {
             if (!userId) {
-                throw new Error("User ID is missing");
+                throw new Error("UserId está faltando");
             }
 
             const formattedData = {
@@ -165,7 +165,6 @@ export function UserEdit() {
                             <select
                                 {...register("teamId")}
                                 className="rounded-full bg-white h-9"
-                                disabled={userLogged.role === "MEMBER" || selectedRole === "MANAGER"}
                             >
                                 <option value="">Selecione uma equipe</option>
                                 {teams?.map((team: any) => (

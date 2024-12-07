@@ -328,10 +328,12 @@ export async function fetchUsersByManagerId() {
     }
 }
 
-export async function fetchGoals() {
+export async function fetchGoals(goalType: string) {
     try {
 
-        const response = await api.get('/goals')
+        const response = await api.get('/goals', {
+            params: {goalType}
+        })
 
         return response.data
     } catch (error: any) {
@@ -393,12 +395,13 @@ export async function deleteGoal(goalId: string) {
 }
 
 
-export async function getGoalsAchievedMetrics() {
+export async function getGoalsAchievedMetrics(isManagingTeam: boolean) {
     try {
 
         const response = await api.get('/goals/metrics',  {
             params: {
-                metric: 'achieved'
+                metric: 'achieved',
+                metricsByTeam: isManagingTeam,
             }
         })
 
@@ -409,12 +412,13 @@ export async function getGoalsAchievedMetrics() {
     }
 }
 
-export async function getGoalsTotalMetrics() {
+export async function getGoalsTotalMetrics(isManagingTeam: boolean) {
     try {
 
         const response = await api.get('/goals/metrics',  {
             params: {
-                metric: 'total'
+                metric: 'total',
+                metricsByTeam: isManagingTeam,
             }
         })
 
@@ -425,12 +429,13 @@ export async function getGoalsTotalMetrics() {
     }
 }
 
-export async function getGoalsPendingMetrics() {
+export async function getGoalsPendingMetrics(isManagingTeam: boolean) {
     try {
 
         const response = await api.get('/goals/metrics',  {
             params: {
-                metric: 'pending'
+                metric: 'pending',
+                metricsByTeam: isManagingTeam,
             }
         })
 
@@ -443,12 +448,13 @@ export async function getGoalsPendingMetrics() {
 
 
 
-export async function getGoalsPercentageMetrics() {
+export async function getGoalsPercentageMetrics(isManagingTeam: boolean) {
     try {
 
         const response = await api.get('/goals/metrics',  {
             params: {
-                metric: 'percentage'
+                metric: 'percentage',
+                metricsByTeam: isManagingTeam,
             }
         })
 

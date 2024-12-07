@@ -3,7 +3,7 @@ import { AppLayout } from "./pages/_layouts/AppLayout";
 import { AuthLayout } from "./pages/_layouts/AuthLayout";
 import { Signin } from "./pages/auth/Sign-in";
 import { Home } from "./pages/app/home/Home";
-import { Goals } from "./pages/app/goals/Goals";
+
 import { Feedbacks } from "./pages/app/Feedbacks/Feedbacks";
 import { Management } from "./pages/app/management/Management";
 import { UserEdit } from "./pages/app/management/UserEdit";
@@ -12,6 +12,7 @@ import { ManagerLayout } from "./pages/_layouts/ManagerLayout";
 import { GoalEdit } from "./pages/app/goals/GoalEdit";
 import { FeedbackEdit } from "./pages/app/Feedbacks/FeedBackEdit";
 import { MemberLayout } from "./pages/_layouts/MemberLayout";
+import { Goals } from "./pages/app/goals/Goals";
 
 export const router = createBrowserRouter([
   {

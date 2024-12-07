@@ -129,7 +129,6 @@ export function UserCreate() {
               <select
                 {...register("teamID")}
                 className="rounded-full bg-white h-9"
-                disabled={selectedRole === "MANAGER"} 
               >
                 <option value="">Selecione uma equipe</option>
                 {teams?.map((team: any) => (

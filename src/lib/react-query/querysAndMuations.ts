@@ -157,10 +157,11 @@ export const useCreateGoal = () => {
     });
 };
 
-export const useFetchGoals = () => {
+export const useFetchGoals = (goalType: string) => {
     return useQuery({
-        queryKey: ['fetchGoals'],
-        queryFn: () => fetchGoals(),
+        queryKey: ['fetchGoals', goalType],
+        queryFn: () => fetchGoals(goalType),
+        enabled: !!goalType
     });
 }
 
@@ -200,31 +201,31 @@ export const useDeleteGoal = () => {
     })
 }
 
-export const useGetGoalsAchievedMetrics = () => {
+export const useGetGoalsAchievedMetrics = (isManagingTeam: boolean) => {
     return useQuery({
-        queryKey: ['GetGoalsAchievedMetric'],
-        queryFn: () => getGoalsAchievedMetrics(),
+        queryKey: ['GetGoalsAchievedMetric', isManagingTeam],
+        queryFn: () => getGoalsAchievedMetrics(isManagingTeam),
     });
 }
 
-export const useGetGoalsTotalMetrics = () => {
+export const useGetGoalsTotalMetrics = (isManagingTeam:boolean) => {
     return useQuery({
-        queryKey: ['GetGoalsTotalMetric'],
-        queryFn: () => getGoalsTotalMetrics(),
+        queryKey: ['GetGoalsTotalMetric', isManagingTeam],
+        queryFn: () => getGoalsTotalMetrics(isManagingTeam),
     });
 }
 
-export const useGetGoalsPendingMetrics = () => {
+export const useGetGoalsPendingMetrics = (isManagingTeam:boolean) => {
     return useQuery({
-        queryKey: ['GetGoalsPendingMetric'],
-        queryFn: () => getGoalsPendingMetrics(),
+        queryKey: ['GetGoalsPendingMetric',isManagingTeam],
+        queryFn: () => getGoalsPendingMetrics(isManagingTeam),
     });
 }
 
-export const useGetGoalsPercentageMetrics = () => {
+export const useGetGoalsPercentageMetrics = (isManagingTeam:boolean) => {
     return useQuery({
-        queryKey: ['GetGoalsPercentageMetric'],
-        queryFn: () => getGoalsPercentageMetrics(),
+        queryKey: ['GetGoalsPercentageMetric',isManagingTeam],
+        queryFn: () => getGoalsPercentageMetrics(isManagingTeam),
     });
 }
 
