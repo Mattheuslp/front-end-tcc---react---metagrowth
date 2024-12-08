@@ -7,7 +7,7 @@ export function PendingCard({user}: any) {
   let isManager = false
 
   if(user) {
-    isManager = user.hasTeam
+    isManager = user.managinTeam
   }
 
   const { data: goalsPending } = useGetGoalsPendingMetrics(isManager);

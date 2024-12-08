@@ -31,6 +31,7 @@ export function FeedbackEdit() {
     const { user } = useUserContext();
 
     const isMember = user?.role === "MEMBER";
+    const isFeedbackOwner = user?.id === feedback?.userId; 
 
     const {
         register,
@@ -66,10 +67,12 @@ export function FeedbackEdit() {
         return <p>Carregando...</p>;
     }
 
+    const isDisabled = isMember || isFeedbackOwner; 
+
     return (
         <main className="p-5">
             <div className="bg-black p-5 rounded-lg">
-                {!isMember && (
+                {!isDisabled && (
                     <h1 className="text-primary-yellowNeon text-3xl mb-4">Editar Feedback</h1>
                 )}
                 <div className="bg-primary-darkGray w-full h-[1px] mb-5"></div>
@@ -128,7 +131,7 @@ export function FeedbackEdit() {
                             id="description"
                             {...register("description")}
                             className="rounded-lg bg-white"
-                            disabled={isMember}
+                            disabled={isDisabled}
                         />
                         {errors.description && (
                             <span className="text-red-500">{errors.description.message}</span>
@@ -143,7 +146,7 @@ export function FeedbackEdit() {
                                 onChange={(value) =>
                                     setValue("technicalSkill", value, { shouldValidate: true })
                                 }
-                                disabled={isMember}
+                                disabled={isDisabled}
                             />
                             {errors.technicalSkill && (
                                 <span className="text-red-500">{errors.technicalSkill.message}</span>
@@ -156,7 +159,7 @@ export function FeedbackEdit() {
                                 onChange={(value) =>
                                     setValue("resilience", value, { shouldValidate: true })
                                 }
-                                disabled={isMember}
+                                disabled={isDisabled}
                             />
                             {errors.resilience && (
                                 <span className="text-red-500">{errors.resilience.message}</span>
@@ -169,7 +172,7 @@ export function FeedbackEdit() {
                                 onChange={(value) =>
                                     setValue("sociability", value, { shouldValidate: true })
                                 }
-                                disabled={isMember}
+                                disabled={isDisabled}
                             />
                             {errors.sociability && (
                                 <span className="text-red-500">{errors.sociability.message}</span>
@@ -177,7 +180,7 @@ export function FeedbackEdit() {
                         </div>
                     </div>
 
-                    {!isMember && (
+                    {!isDisabled && (
                         <div className="flex justify-end">
                             <ButtonIcon icon={IoIosSave} text="Salvar" type="submit" />
                         </div>

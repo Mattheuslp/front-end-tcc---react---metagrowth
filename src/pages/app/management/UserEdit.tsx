@@ -165,6 +165,7 @@ export function UserEdit() {
                             <select
                                 {...register("teamId")}
                                 className="rounded-full bg-white h-9"
+                                disabled
                             >
                                 <option value="">Selecione uma equipe</option>
                                 {teams?.map((team: any) => (
@@ -263,7 +264,7 @@ export function UserEdit() {
                                 id="certifications"
                                 {...register("certifications")}
                                 className="h-60 rounded-2xl bg-white"
-                                disabled={false} // Sempre editável
+                                disabled={false} 
                             />
                         </div>
                     </div>

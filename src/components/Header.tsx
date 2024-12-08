@@ -55,7 +55,6 @@ export function Header() {
         </div>
       </div>
       <div className="flex absolute bottom-0 gap-16 font-bold">
-        <NavLink to={"/"}>Inicio</NavLink>
         <NavLink to={"/metas"}>Metas</NavLink>
         <NavLink to={"/feedbacks"}>Feedback</NavLink>
         {user.role === "MANAGER" && <NavLink to={"/gestao"}>Equipes</NavLink>}

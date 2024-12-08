@@ -525,10 +525,12 @@ export async function getFeedbackById(id: string) {
 }
 
 
-export async function getAllFeedbacks() {
+export async function getAllFeedbacks(feedbackType: string) {
     try {
 
-        const response = await api.get(`/feedbacks`)
+        const response = await api.get(`/feedbacks`, {
+            params: {feedbackType}
+        })
 
         return response.data
     } catch (error: any) {

@@ -4,12 +4,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./../../../components/ui/dialog";
-import DOMPurify from "dompurify";
 
 export function GoalsReport() {
   const { data, isLoading } = useGetGoalsReport();
-
-  const sanitizedData = data ? DOMPurify.sanitize(data) : "";
 
   return (
     <main>
@@ -20,14 +17,41 @@ export function GoalsReport() {
           </DialogTitle>
           <div className="bg-primary-darkGray w-full h-[1px]"></div>
         </DialogHeader>
-        <div>
+        <div className="mt-4">
           {isLoading ? (
-            <p>Carregando...</p>
+            <p className="text-white">Carregando...</p>
           ) : (
-            <div
-              className="text-white"
-              dangerouslySetInnerHTML={{ __html: sanitizedData }}
-            />
+            data && (
+              <div className="text-white space-y-6">
+                {/* Insights */}
+                <div>
+                  <h2 className="text-lg font-bold text-primary-yellowNeon mb-2">
+                    Insights
+                  </h2>
+                  <p>{data.insights}</p>
+                </div>
+
+                {/* Dicas */}
+                <div>
+                  <h2 className="text-lg font-bold text-primary-yellowNeon mb-2">
+                    Dicas
+                  </h2>
+                  <p>{data.dicas}</p>
+                </div>
+
+                {/* Estatísticas */}
+                <div>
+                  <h2 className="text-lg font-bold text-primary-yellowNeon mb-2">
+                    Estatísticas
+                  </h2>
+                  <ul className="list-disc list-inside">
+                    <li>Total de Metas: {data.estatisticas.totalMetas}</li>
+                    <li>Metas Concluídas: {data.estatisticas.metasConcluidas}</li>
+                    <li>Metas Pendentes: {data.estatisticas.metasPendentes}</li>
+                  </ul>
+                </div>
+              </div>
+            )
           )}
         </div>
       </DialogContent>

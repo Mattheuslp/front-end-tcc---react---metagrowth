@@ -7,7 +7,7 @@ export function GoalsAchievedCard({user}: any) {
   let isManager = false
 
   if(user) {
-    isManager = user.hasTeam
+    isManager = user.managinTeam
   }
 
   const { data: goalsAchievedMetrics } = useGetGoalsAchievedMetrics(isManager);

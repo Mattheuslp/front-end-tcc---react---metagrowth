@@ -33,7 +33,7 @@ export function Signin() {
       loadUser()
 
       if (isAuthenticated) {
-        navigate('/')
+        navigate('/metas')
       }
       toast.success('Bem vindo de volta :)')
     } catch (error) {

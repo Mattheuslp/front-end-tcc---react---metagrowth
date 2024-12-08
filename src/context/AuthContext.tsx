@@ -8,7 +8,7 @@ export const INITIAL_USER = {
     position: '',
     role: '',
     imageUrl: '',
-    hasTeam: ''
+    managinTeam: false
 };
 
 const INITIAL_STATE = {
@@ -25,7 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true); 
 
-    console.log('logged', user)
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');

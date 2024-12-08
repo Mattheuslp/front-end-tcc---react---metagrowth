@@ -26,7 +26,7 @@ interface UserWithoutTeam {
 
 export function TeamEdit() {
     const { teamId } = useParams();
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<CreateTeamFormData>({
+    const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<CreateTeamFormData>({
         resolver: zodResolver(createTeamSchema),
     });
 
@@ -46,6 +46,12 @@ export function TeamEdit() {
     }, [teamData, setValue]);
 
     const handleAddMember = () => {
+
+        if (selectedUser === watch("manager")) {
+            toast.error("O gestor não pode ser adicionado como membro da equipe.");
+            return;
+        }
+
         const user = userWithoutTeams?.find((user: UserWithoutTeam) => user.id === selectedUser);
         if (user && !selectedMembers.find(member => member.id === user.id)) {
             setSelectedMembers([...selectedMembers, user]);

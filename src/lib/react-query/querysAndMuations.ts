@@ -240,10 +240,10 @@ export const useCreateFeedback = () => {
     });
 };
 
-export const useGetAllFeedback = () => {
+export const useGetAllFeedback = (feedbackType: string) => {
     return useQuery({
-        queryKey: ['GetAllFeedbacks'],
-        queryFn: () => getAllFeedbacks(),
+        queryKey: ['GetAllFeedbacks', feedbackType],
+        queryFn: () => getAllFeedbacks(feedbackType),
     });
 }
 
@@ -284,5 +284,7 @@ export const useGetGoalsReport = () => {
     return useQuery({
         queryKey: ['GetGoalsReport'],
         queryFn: () => getGoalsReport(),
+        staleTime: Infinity, 
+        refetchOnWindowFocus: false, 
     });
 }

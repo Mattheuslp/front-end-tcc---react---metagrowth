@@ -5,7 +5,7 @@ export function ResultCard({user}: any) {
   let isManager = false
 
   if(user) {
-    isManager = user.hasTeam
+    isManager = user.managinTeam
   }
 
   const { data: goalsPercentage } = useGetGoalsPercentageMetrics(isManager);

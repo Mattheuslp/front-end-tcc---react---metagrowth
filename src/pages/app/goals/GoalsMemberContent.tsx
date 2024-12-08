@@ -6,13 +6,9 @@ import { GoalsAchievedCard } from "./GoalsAchievedCard";
 import { PendingCard } from "./PendingCard";
 import { ResultCard } from "./ResultCard";
 import { TotalOfGoalsCard } from "./TotalOfGoalsCard";
-import { FaRegEdit } from "react-icons/fa";
 import { IoMdOpen } from "react-icons/io";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../../../components/ui/alert-dialog";
-import { Button } from "../../../components/ui/button";
-import { MdDeleteForever } from "react-icons/md";
 import { useUserContext } from "../../../context/AuthContext";
-import { useDeleteGoal, useFetchGoals, useUpdateGoal } from "../../../lib/react-query/querysAndMuations";
+import { useFetchGoals, useUpdateGoal } from "../../../lib/react-query/querysAndMuations";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TabsContent } from "../../../components/ui/tabs";
@@ -20,7 +16,6 @@ import { TabsContent } from "../../../components/ui/tabs";
 export function GoalsMemberContent() {
 
     const { data: initialGoals = [] } = useFetchGoals('member');
-    const { mutateAsync: deleteGoal } = useDeleteGoal();
     const { mutateAsync: updateGoal } = useUpdateGoal();
     const { user } = useUserContext();
 
@@ -30,17 +25,6 @@ export function GoalsMemberContent() {
         setGoals(initialGoals);
     }, [initialGoals]);
 
-    const handleGoalDelete = async (goalId: string) => {
-        try {
-            await deleteGoal(goalId);
-            setGoals((prevGoals: any) =>
-                prevGoals.filter((goal: any) => goal.id !== goalId)
-            );
-            toast.success("Meta excluída com sucesso!");
-        } catch (error: any) {
-            toast.error(error.message || "Erro ao excluir a meta");
-        }
-    };
 
     const handleGoalCompletionToggle = async (
         goalId: string,

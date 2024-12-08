@@ -13,7 +13,7 @@ export function AuthLayout() {
     return (
         <>
             {isAuthenticated ? (
-                <Navigate to="/" replace/>
+                <Navigate to="/metas" replace/>
             ) : (
                 <Outlet />
             )}

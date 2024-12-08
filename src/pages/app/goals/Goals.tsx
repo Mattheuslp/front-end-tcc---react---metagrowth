@@ -45,7 +45,7 @@ export function Goals() {
       <Tabs defaultValue="member" >
         <TabsList>
           <TabsTrigger value="member">Minhas metas</TabsTrigger>
-          {user.hasTeam  && (<TabsTrigger value="manager">Metas da equipe</TabsTrigger>)}
+          {user.managinTeam  && (<TabsTrigger value="manager">Metas da equipe</TabsTrigger>)}
         </TabsList>
         <GoalsMemberContent />
         <GoalsManagerContent />
