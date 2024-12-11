@@ -29,7 +29,6 @@ const createUserSchema = z.object({
     password: z.string().optional()
 });
 
-
 type CreateUserFormData = z.infer<typeof createUserSchema>;
 
 export function UserEdit() {
@@ -52,6 +51,7 @@ export function UserEdit() {
     });
 
     const selectedRole = watch("role");
+    const isCurrentUser = userLogged.id === userId;
 
     useEffect(() => {
         if (user) {
@@ -198,7 +198,7 @@ export function UserEdit() {
                                 type="date"
                                 {...register("admission_date")}
                                 className="rounded-full bg-white"
-                                disabled={userLogged.role === "MEMBER"}
+                                disabled={isCurrentUser} 
                             />
                         </div>
                     </div>
@@ -255,7 +255,8 @@ export function UserEdit() {
                                 id="bio"
                                 {...register("bio")}
                                 className="h-60 rounded-2xl bg-white"
-                                disabled={userLogged.role === "MEMBER"}
+                             
+                                disabled={false}
                             />
                         </div>
                         <div className="flex-1">
@@ -264,6 +265,7 @@ export function UserEdit() {
                                 id="certifications"
                                 {...register("certifications")}
                                 className="h-60 rounded-2xl bg-white"
+                             
                                 disabled={false} 
                             />
                         </div>
